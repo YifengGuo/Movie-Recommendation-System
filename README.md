@@ -118,3 +118,24 @@ Collaborative Filtering
     * current user rating for current movie
     
 #### 1.3 MapReduce Jobs
+
+* First MapReduce Job: data preprocessing
+    * Divide data by user_id
+    * Merge data with same user_id
+![](images/1stMapReduce.png)
+
+    * Mapper: divide data by user_id
+    ![](images/1stMapper.png)
+    
+    * Reducer: merge data with same user_id
+    ![](images/1stReducer.png)
+
+
+* Second MapReduce Job: build co-occurrence matrix
+![](images/2ndMapReduce.png)
+  * Mapper: Count the watch times for **each two movies** (think about word count idea for each movie)
+            For for loop on the whole row and count each two movies relation by 1
+    ![](images/2ndMapper.png)
+  * Reducer: Merge the result
+    ![](images/2ndReducer.png)
+
