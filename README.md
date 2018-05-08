@@ -1,8 +1,8 @@
-##Movie Recommendation System
+## Movie Recommendation System
 
-###1. Algorithm used for this project
+### 1. Algorithm used for this project
 
-####1.1 Common recommendation algorithms
+#### 1.1 Common recommendation algorithms
 
 Collaborative Filtering
 * User-Based CF
@@ -23,7 +23,7 @@ Collaborative Filtering
     
 * **The main challenge is how to calculate the similarities between items or users**
 
-####1.2 Item-Based Collaborative Filtering
+#### 1.2 Item-Based Collaborative Filtering
 
 * Why choose Item-Based-CF?
   1. Because the number of users is way too larger than the number of movies. If we try to use user-based-cf, we will
@@ -117,4 +117,4 @@ Collaborative Filtering
     * movie_id
     * current user rating for current movie
     
-####1.3 MapReduce Jobs
+#### 1.3 MapReduce Jobs
