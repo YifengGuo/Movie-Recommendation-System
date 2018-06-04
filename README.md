@@ -90,8 +90,12 @@ Collaborative Filtering
     with other 1000 movies and M3 only has relationship with other 5 movies. In this way, the M1 and M3 should be more 
     related. This is the reason we apply normalization to make the similarity comparison on the same standard.  
     
-    Each row of normalized matrix represents current movie's similarities with other movies which are both rated by
-    some user
+    * Each row of normalized matrix represents current movie's similarities with other movies which are both rated by
+    one user. In other words, each row means the similarity probabilities between M_x and all other movies.
+    * Each entry of the matrix represents the conditional probability. (M1, M2) means given rated M1, what is
+    the probability for this user to also rate M2.
+    
+    * P(A|B) != P(B|A) explains why probability on diagonal are not equal
     
     In this way, the co-occurrence matrix becomes asymmetrical. value(M1, M2) = 2/6, value(M2, M1) = 2/11 
     This can be explained as M1 was not that popular so people who watch both M1 and M2 are even less. So M1 to M2's
@@ -102,8 +106,16 @@ Collaborative Filtering
     * The principle is if some user has lower rating on M1, then this rating will reduce the weight on the
       movies which have more similarities with M1 and furthermore affect the recommendation result on the 
       movies this user has not yet watched.
-    * Unwatched movie's default score cannot be set as 0. Otherwise this will affect the result list
-      (UserB rate high score on M2 however score for M2 in result is lower than original score).
+      * Example: for For M4 and UserB rating matrix. Multiplication is made by row x column.
+                 So the meaning is: for (M4, M1) = 1/5, for unseen M4 of UserB, it has 1/5
+                 for UserB to rate 3 score. Likely, 3/5 probability for UserB rate 7 score on
+                 M4. M4 and M3 are not similar, so cannot infer the score UserB may rate for M4
+                 based on M3.
+    * **Unwatched movie's default score cannot be set as 0**. Otherwise this will affect the result list
+      (UserB rate high score on M2 however score for M2 in result is lower than original score). The reason 
+      is UserB did not watch M4 and M5 and we intuitively set it as 0 so this could make calculation on M2 
+      missing some part of weights. And this problem can be avoided if the data is so huge which could fade
+      away the effect of some NULL entry in the rating matrix. 
   ![](images/ResultList.png)
   
   
