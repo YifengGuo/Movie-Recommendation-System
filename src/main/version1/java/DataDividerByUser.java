@@ -1,4 +1,4 @@
-package main.java;
+package main.version1.java;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
