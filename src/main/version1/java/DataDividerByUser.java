@@ -75,8 +75,8 @@ public class DataDividerByUser {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
-        TextInputFormat.setInputPaths(job, new Path(args[0]));
-        TextOutputFormat.setOutputPath(job, new Path(args[1]));
+        TextInputFormat.setInputPaths(job, new Path(args[0])); // src/main/version1/raw_data/user_rating_history.txt
+        TextOutputFormat.setOutputPath(job, new Path(args[1])); // src/main/version1/output/first_mapreduce
 
         job.waitForCompletion(true);
     }
