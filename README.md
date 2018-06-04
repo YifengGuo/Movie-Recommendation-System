@@ -34,7 +34,7 @@ Collaborative Filtering
      
 * How to calculate similarity of items?
   * Build co-occurrence matrix
-  * Build rating matrix
+  * Build rating matrix for each user
   * Matrix multiplication to get the recommendation list
   
 
