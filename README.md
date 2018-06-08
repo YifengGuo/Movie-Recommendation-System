@@ -151,3 +151,12 @@ Collaborative Filtering
   * Reducer: Merge the result
     ![](images/2ndReducer.png)
 
+
+* Jobs ahead:
+    * Normalize the Co-occurrence Matrix
+    * Get the Rating Matrix
+    * Multiply co-occurrence matrix and rating matrix
+    * Generate recommendation list
+    
+* Normalize the Co-occurrence Matrix
+    ![](images/Normalization_Details.png)
