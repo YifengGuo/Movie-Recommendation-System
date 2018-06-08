@@ -159,9 +159,9 @@ Collaborative Filtering
 * Challenges:
     * Mapper can once read input from one file. So when Mapper reads one row from Co-occurrence Matrix,
     there is nothing from another matrix. So the multiplication cannot happen in this way. 
-    One feasible method is to restore Co-occurrence Matrix into a real matrix and cache it in the memory. 
-    When Mapper reads one row from Rating Matrix, get data of Co-occurrence Matrix from the memory. 
-    Do the multiplication and output to the Reducer.
+    * One feasible method is to restore Co-occurrence Matrix into a real matrix and cache it in the memory. 
+      When Mapper reads one row from Rating Matrix, get data of Co-occurrence Matrix from the memory. 
+    * Do the multiplication and output to the Reducer.
       * Read the Co-occurrence Matrix and restore in the memory (store in HashMap in setup())
       ![](images/MatrixMultiplicationChallenge.jpg)
       ![](images/InMemoryStoreHashMap.jpg)
