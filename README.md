@@ -12,7 +12,7 @@ Collaborative Filtering
     For different users, initialize their rating matrix for several movies.
     And if we found userA is similar to UserC, we can recommend Movie4 to UserC because similar UserA likes this
     movie as well.
-    
+  
 * Item-Based CF
   * A form of collaborative filtering based on the similarity between items
     calculated using people's ratings of those items 
@@ -20,7 +20,7 @@ Collaborative Filtering
     For different movies, their similarities are calculated by people's ratings. So based on their ratings, the Movie1 
     and Movie3 are more similar with each other than Movie2. So even if UserC who does not watch Movie3, but MovieC 
     is similar to Movie1 which UserC gave a high rating, we can recommend this movie to UserC based on item-based-CF
-    
+  
 * **The main challenge is how to calculate the similarities between items or users**
 
 #### 1.2 Item-Based Collaborative Filtering
@@ -31,12 +31,11 @@ Collaborative Filtering
   2. Item (similarities between items) will not change frequently which can simplify the amount of calculation 
   3. It is more convincing to use users' own historical data instead of recommending users with something by someone 
      else.
-     
+  
 * How to calculate similarity of items?
   * Build co-occurrence matrix
   * Build rating matrix for each user
   * Matrix multiplication to get the recommendation list
-  
 
 * Co-occurrence Matrix
   * When use Item-Based-CF: first to consider how to describe the relationship between different items(movies)
@@ -48,7 +47,7 @@ Collaborative Filtering
     * Based on movie's info
       * Movie category
       * Movie producer
-      
+    
   * Rating history:
     * Assume all the users are good user who rate by themselves
     * **If one user rated two movies, both two movies are related**
@@ -67,7 +66,7 @@ Collaborative Filtering
       The left matrix is the rating matrix of different users on different movies. (default score is 1) <br>
       The right matrix is **co-occurrence Matrix**<br>
       The diagonal of co-occurrence matrix represents the total watched times of this movies
-      
+    
   * Rating Matrix
     * How to tell the difference between movies towards each user?
     
@@ -117,8 +116,7 @@ Collaborative Filtering
       missing some part of weights. And this problem can be avoided if the data is so huge which could fade
       away the effect of some NULL entry in the rating matrix. 
   ![](images/ResultList.png)
-  
-  
+
 * Raw Data Storage:
   * To guarantee new data can be inserted easily in the future, we store the raw data in sparse matrix format
   ![](images/RawMatrix.png)
@@ -147,7 +145,7 @@ Collaborative Filtering
 ![](images/2ndMapReduce.png)
   * Mapper: Count the watch times for **each two movies** (think about word count idea for each movie)
             For for loop on the whole row and count each two movies relation by 1
-    ![](images/2ndMapper.png)
+      ![](images/2ndMapper.png)
   * Reducer: Merge the result
     ![](images/2ndReducer.png)
 
@@ -157,6 +155,27 @@ Collaborative Filtering
     * Get the Rating Matrix
     * Multiply co-occurrence matrix and rating matrix
     * Generate recommendation list
+    
+* Challenges:
+    * Mapper can once read input from one file. So when Mapper reads one row from Co-occurrence Matrix,
+    there is nothing from another matrix. So the multiplication cannot happen in this way. 
+    One feasible method is to restore Co-occurrence Matrix into a real matrix and cache it in the memory. 
+    When Mapper reads one row from Rating Matrix, get data of Co-occurrence Matrix from the memory. 
+    Do the multiplication and output to the Reducer.
+      * Read the Co-occurrence Matrix and restore in the memory (store in HashMap in setup())
+      ![](images/MatrixMultiplicationChallenge.jpg)
+      ![](images/InMemoryStoreHashMap.jpg)
+      * Read the Rating Matrix
+      * Do the multiplication
+      ![](images/MatrixMultiplication.jpg)
+          * Why store a column in HashMap instead of a row is:
+              1. Co-occurrence Matrix rows and columns are symmetrical before normalization
+              2. Mapper job is to calculate corresponding entry multiplication.
+                 So when reads userB rating on M1 (3), it should be multiplied with 2/6, 2/11...,
+                 when reads userB rating on M2 (7), it should be multiplied with 2/6, 4/11...
+                 And let the reducer do the sum job like we do in real matrix multiplication process (row x column)
+                 
+      One potential problem is when the matrix is too huge, it would cause OutOfMemoryError
     
 * Normalize the Co-occurrence Matrix
     ![](images/Normalization_Details.png)
