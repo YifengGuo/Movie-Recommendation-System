@@ -46,7 +46,7 @@ public class RecommendationListGenerator {
             // read movie watching history
             Configuration conf = context.getConfiguration();
             String filePath = conf.get("watchHistory"); // Get the watched history file (user_rating_history.txt)
-            // the path name is set in Drive.java
+            // the path name is set in main()
             Path path = new Path(filePath);
             FileSystem fs = FileSystem.get(conf);
             BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(path))); // get the data from HDFS
@@ -137,29 +137,30 @@ public class RecommendationListGenerator {
                 context.write(key, new Text(movie_title + ":" + total_score));
             }
         }
+    }
 
-        public static void main(String[] args) throws Exception {
-            Configuration conf = new Configuration();
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+        conf.set("watchHistory", args[0]); // user_rating_history.txt
+        conf.set("movieTitles", args[1]);  // movie_title.txt
 
-            Job job = Job.getInstance();
-            conf.set("watchHistory", args[0]); // user_rating_history.txt
-            conf.set("movieTitles", args[1]);  // movie_title.txt
+        Job job = Job.getInstance(conf);
 
-            job.setMapperClass(RecommendationListGeneratorMapper.class);
-            job.setReducerClass(RecommendationListGeneratorReducer.class);
+        job.setMapperClass(RecommendationListGeneratorMapper.class);
+        job.setReducerClass(RecommendationListGeneratorReducer.class);
 
-            job.setJarByClass(RecommendationListGenerator.class);
+        job.setJarByClass(RecommendationListGenerator.class);
 
-            job.setInputFormatClass(TextInputFormat.class);
-            job.setOutputFormatClass(TextOutputFormat.class);
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
 
-            job.setOutputKeyClass(IntWritable.class);
-            job.setOutputValueClass(Text.class);
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
 
-            TextInputFormat.setInputPaths(job, new Path(args[2]));  // output of MatricesMultiplication reducer
-            TextOutputFormat.setOutputPath(job, new Path(args[3])); // output of this MR job reducer
+        TextInputFormat.setInputPaths(job, new Path(args[2]));  // output of MatricesMultiplication reducer
+        TextOutputFormat.setOutputPath(job, new Path(args[3])); // output of this MR job reducer
+                                                                // src/main/version1/output/recommendation_list
 
-            job.waitForCompletion(true);
-        }
+        job.waitForCompletion(true);
     }
 }

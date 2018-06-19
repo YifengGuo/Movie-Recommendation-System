@@ -114,8 +114,9 @@ public class MatricesMultiplication {
                 // Normalization
                 score /= denominatorMap.get(relation.getMovie2()); // denominator is sum on row, so should get movie2
                 // confirm the precision for the score
-                DecimalFormat df = new DecimalFormat("#.00");
-                score = Double.valueOf(df.format(score));
+                // all do it in reduce
+//                DecimalFormat df = new DecimalFormat("#.00");
+//                score = Double.valueOf(df.format(score));
 
                 context.write(new Text(user_id + ":" + relation.getMovie2()), new DoubleWritable(score));
             }
@@ -141,6 +142,9 @@ public class MatricesMultiplication {
             String[] tokens = key.toString().trim().split(":");
             int user_id = Integer.parseInt(tokens[0]);
             int movie_id = Integer.parseInt(tokens[1]);
+            // confirm the precision for the score
+            DecimalFormat df = new DecimalFormat("#.00");
+            total = Double.valueOf(df.format(total));
             context.write(new IntWritable(user_id), new Text(movie_id + ":" + total));
         }
     }
@@ -164,8 +168,8 @@ public class MatricesMultiplication {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
-        TextInputFormat.setInputPaths(job, new Path(args[1]));
-        TextOutputFormat.setOutputPath(job, new Path(args[2]));
+        TextInputFormat.setInputPaths(job, new Path(args[1])); // user_rating_history.txt
+        TextOutputFormat.setOutputPath(job, new Path(args[2])); // output dir
 
         job.waitForCompletion(true);
     }
