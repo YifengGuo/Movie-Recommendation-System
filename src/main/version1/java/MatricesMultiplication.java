@@ -58,7 +58,7 @@ public class MatricesMultiplication {
                                                             // the path name is set in Drive.java
             Path path = new Path(filePath);
             FileSystem fs = FileSystem.get(conf);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(path))); // get the data by HDFS
+            BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(path))); // get the data from HDFS
 
             // read Co-occurrence Matrix
             // format:      movie_id:movie_id \t relation
@@ -127,7 +127,7 @@ public class MatricesMultiplication {
          *
          * @param key    user_id:movie_id
          * @param values {1/6,2/3,2/11...}
-         * @param context user_id :   {movie_id : total_score}
+         * @param context user_id \t {movie_id : total_score}
          * @throws InterruptedException
          * @throws IOException
          */
@@ -162,7 +162,7 @@ public class MatricesMultiplication {
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(DoubleWritable.class);
         job.setOutputKeyClass(IntWritable.class);
-        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
 
         TextInputFormat.setInputPaths(job, new Path(args[1]));
         TextOutputFormat.setOutputPath(job, new Path(args[2]));
