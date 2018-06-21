@@ -80,7 +80,7 @@ public class MatricesMultiplication {
                     String[] movie_relation = value.toString().trim().split("=");
                     normalizedCoocurrenceMatrixMap.put(movie_relation[0], Double.parseDouble(movie_relation[1]));
                 } else {
-                    String[] user_rating = values.toString().trim().split(":");
+                    String[] user_rating = value.toString().trim().split(":");
                     ratingHistoryMap.put(user_rating[0], Double.parseDouble(user_rating[1]));
                 }
             }
@@ -128,7 +128,7 @@ public class MatricesMultiplication {
         }
     }
 
-    public static void main(String[] args) throws  Exception {
+    public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);
 
@@ -155,7 +155,7 @@ public class MatricesMultiplication {
 
 
         job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(IntWritable.class);
+        job.setMapOutputValueClass(Text.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
