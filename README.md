@@ -179,3 +179,46 @@ Collaborative Filtering
     
 * Normalize the Co-occurrence Matrix
     ![](images/Normalization_Details.png)
+
+
+
+### Update on Version 2
+
+#### 1. work flow
+
+```
+DataDivider -> CooccurrenceMatrixGenerator -> Normalization -> MatricesMultiplication -> RecommendationListGenerator
+```
+
+
+
+#### 2. Updates
+
+```
+During matrices multiplication process, instead of storing the whole Cooccrruence Matrix in the memory in Version 1, we use Hadoop ChainMapper to read CooccurrenceMatrix and RatingMatrix in parallel. Each time when reading data from HDFS, first mapper reads an entry in the cooccurrence matrix and second mapper reads one line from rating matrix. During reduce process, distinguish two data by its identifiers (":" or "=") and multiply all data from cooccurrence matrix and one line from rating matrix with same key (movieB_id) and output them.
+At last, during recommendation list generator mapper process, filter out watched movies records, sum up ratings and convert movie_id to movie_title.
+```
+
+
+
+#### 3. Results
+
+The same as Version 1 but avoid potential OutOfMemoryError
+
+```
+1	Book Club:1.86
+1	The Seagull:1.55
+1	Leon:1.8
+1	Three Idiots:1.25
+2	The Seagull:1.55
+2	Leon:2.05
+2	Three Idiots:1.0
+3	Death Pool:1.42
+3	TAG:1.44
+3	Leon:1.65
+4	Death Pool:2.85
+4	The Seagull:2.6
+4	Three Idiots:2.38
+5	Three Idiots:2.88
+```
+
