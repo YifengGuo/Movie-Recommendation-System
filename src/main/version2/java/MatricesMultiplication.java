@@ -68,7 +68,10 @@ public class MatricesMultiplication {
         @Override
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             // to store each entry in normalized cooccurrence matrix
-            // key: movie_id   value: normalized relation
+            // for this reduce, input key is movieB
+
+            // key: movieA_id   value: normalized relation, so it stores an entry in the co-occurrence matrix
+            // under current column (moiveB)
             Map<String, Double> normalizedCoocurrenceMatrixMap = new HashMap<>();
 
             // to store each entry in user rating history
@@ -116,7 +119,7 @@ public class MatricesMultiplication {
              *
              */
             for (Map.Entry<String, Double> entry : normalizedCoocurrenceMatrixMap.entrySet()) {
-                String movie = entry.getKey();
+                String movie = entry.getKey(); // moiveA_id
                 double relation = entry.getValue();
 
                 for (Map.Entry<String, Double> element : ratingHistoryMap.entrySet()) {

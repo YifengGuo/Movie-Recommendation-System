@@ -195,8 +195,17 @@ DataDivider -> CooccurrenceMatrixGenerator -> Normalization -> MatricesMultiplic
 #### 2. Updates
 
 ```
-During matrices multiplication process, instead of storing the whole Cooccrruence Matrix in the memory in Version 1, we use Hadoop ChainMapper to read CooccurrenceMatrix and RatingMatrix in parallel. Each time when reading data from HDFS, first mapper reads an entry in the cooccurrence matrix and second mapper reads one line from rating matrix. During reduce process, distinguish two data by its identifiers (":" or "=") and multiply all data from cooccurrence matrix and one line from rating matrix with same key (movieB_id) and output them.
-At last, during recommendation list generator mapper process, filter out watched movies records, sum up ratings and convert movie_id to movie_title.
+During matrices multiplication process, instead of storing the whole Cooccrruence Matrix in the memory in Version 1, 
+we use Hadoop ChainMapper to read CooccurrenceMatrix and RatingMatrix in parallel.
+ 
+Each time when reading data from HDFS, first mapper reads an entry in the cooccurrence matrix and second mapper reads 
+one line from rating matrix. 
+
+During reduce process, distinguish two data by its identifiers (":" or "=") and multiply all data from cooccurrence 
+matrix and one line from rating matrix with same key (movieB_id) and output them.
+
+At last, during recommendation list generator mapper process, filter out watched movies records, 
+sum up ratings and convert movie_id to movie_title.
 ```
 
 
